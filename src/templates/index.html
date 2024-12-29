@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">Blog Yazılarım</h1>
+    <p class="lead text-muted">Teknoloji ve yazılım hakkında yazılar</p>
+</div>
+
+<div class="row g-4">
+    {% for post in posts %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100">
+            <div class="card-img-top bg-light" style="height: 200px;">
+                {% if post.image %}
+                <img src="{{ url_for('serve_image', filename=post.image) }}" 
+                     class="w-100 h-100" alt="{{ post.title }}" 
+                     style="object-fit: cover;">
+                {% else %}
+                <img src="{{ url_for('static', filename='default-post.jpg') }}" 
+                     class="w-100 h-100" alt="Varsayılan resim" 
+                     style="object-fit: cover;">
+                {% endif %}
+            </div>
+            <div class="card-body d-flex flex-column">
+                <div class="mb-3">
+                    <span class="badge bg-primary">{{ post.category_rel.name }}</span>
+                    <small class="text-muted float-end">{{ post.reading_time }} dk</small>
+                </div>
+                <h2 class="card-title h5 fw-bold mb-3">{{ post.title }}</h2>
+                <p class="card-text flex-grow-1">{{ post.preview }}</p>
+                <div class="mt-3">
+                    <a href="{{ url_for('post', slug=post.slug) }}" class="btn btn-outline-primary btn-sm">Devamını Oku</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

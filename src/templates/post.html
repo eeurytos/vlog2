@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Ana Sayfa</a></li>
+                <li class="breadcrumb-item active">{{ post.title }}</li>
+            </ol>
+        </nav>
+
+        <article class="blog-post">
+            <header class="mb-4">
+                <h1 class="display-5 fw-bold">{{ post.title }}</h1>
+                <div class="text-muted mb-3">
+                    <span class="badge bg-primary">{{ post.category_rel.name }}</span>
+                    <small class="ms-2">{{ post.created_at.strftime('%d.%m.%Y') }} • {{ post.reading_time }} dk okuma</small>
+                </div>
+            </header>
+
+            {% if post.image %}
+            <div class="mb-4">
+                <img src="{{ url_for('serve_image', filename=post.image) }}" 
+                     class="img-fluid rounded" alt="{{ post.title }}"
+                     style="max-height: 400px; width: 100%; object-fit: cover;">
+            </div>
+            {% endif %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    {{ post.content | safe }}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Ana Sayfaya Dön
+                </a>
+            </div>
+        </article>
+    </div>
+</div>
+{% endblock %} 

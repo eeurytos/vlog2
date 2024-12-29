@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: blog-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd src && gunicorn wsgi:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: FLASK_APP
+        value: src.main
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        value: your-secret-key-here 

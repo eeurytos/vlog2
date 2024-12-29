@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">
+                        {% if post %}
+                            Yazıyı Düzenle
+                        {% else %}
+                            Yeni Yazı Ekle
+                        {% endif %}
+                    </h2>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Başlık</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   value="{{ post.title if post else '' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label">Kategori</label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="">Kategori Seçin</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                        {% if post and post.category_id == category.id %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="preview" class="form-label">Önizleme</label>
+                            <textarea class="form-control" id="preview" name="preview" rows="3" 
+                                      required>{{ post.preview if post else '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label">İçerik</label>
+                            <textarea class="form-control" id="content" name="content" rows="10" 
+                                      required>{{ post.content if post else '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Kapak Resmi</label>
+                            {% if post and post.image %}
+                                <div class="mb-2">
+                                    <img src="{{ url_for('serve_image', filename=post.image) }}" 
+                                         alt="Mevcut resim" class="img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            {% endif %}
+                            <input type="file" class="form-control" id="image" name="image" 
+                                   accept="image/*">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reading_time" class="form-label">Okuma Süresi (dakika)</label>
+                            <input type="number" class="form-control" id="reading_time" 
+                                   name="reading_time" min="1" max="60" 
+                                   value="{{ post.reading_time if post else '5' }}" required>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Geri Dön
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
